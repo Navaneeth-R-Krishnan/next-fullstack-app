@@ -12,6 +12,15 @@ async function dbConnect():Promise<void>{
         return
     }
     try {
-        await mongoose.connect(process.env.MONGOURI || " ");
+        const db = await mongoose.connect(process.env.MONGOURI || " ",{});
+
+        connection.isConnected= db.connections[0].readyState
     }
+    catch(e){
+        console.log("DB is not connected, process is exiting");
+        process.exit(1)
+        
+    }
+
 }
+export default dbConnect
