@@ -12,6 +12,6 @@ async function dbConnect():Promise<void>{
         return
     }
     try {
-        await mongoose.connect()
+        await mongoose.connect(process.env.MONGOURI || " ");
     }
 }
