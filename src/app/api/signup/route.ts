@@ -25,19 +25,19 @@ export async function POST(request: Request) {
     }
 
     const existingUserByEmail = await UserModel.findOne({ email });
-    let verifyCode = Math.floor(100000 + Math.random() * 900000).toString();
+    let verifyCode = Math.floor(100000 + Math.random() * 900000).toString(); // 6 digit Verification code 
 
     if (existingUserByEmail) {
       if (existingUserByEmail.isVerified) {
         return Response.json(
           {
-            success: false,
+            success: false,  
             message: 'User already exists with this email',
           },
           { status: 400 }
         );
       } else {
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(password, 16);
         existingUserByEmail.password = hashedPassword;
         existingUserByEmail.verifyCode = verifyCode;
         existingUserByEmail.verifyCodeExpiry = new Date(Date.now() + 3600000);
